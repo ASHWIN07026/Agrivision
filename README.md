@@ -1,28 +1,59 @@
-# AgriVision
+# AgriVision — Mini Project
 
-Plant disease classification and historical crop-yield estimation.
+AgriVision is an agriculture dashboard for plant disease classification and historical crop-yield estimation.
 
-## Live application
+## Live Demo
 https://agrivision-6o2f.onrender.com
 
-## Features
-- React dashboard connected to FastAPI.
-- MobileNetV2 disease classification for 15 supported PlantVillage classes.
-- Random Forest historical yield estimation using country/region, crop and year.
-- Lightweight LiteRT disease inference for deployment.
+## Project Modules
+1. Disease Detection — classifies leaf images into 15 supported PlantVillage categories.
+2. Yield Estimation — estimates historical crop yield using country/region, crop and year.
+3. Market Information — interface available; live data integration remains pending.
 
-## Evaluation
-- Original disease model test accuracy: 83.45% on 731 images.
-- Yield model test R²: 0.657.
-- Converted LiteRT model checked on three sample images; full test-set evaluation remains pending.
+## Technologies
+- Frontend: React and Vite
+- Backend: Python and FastAPI
+- Disease Model: MobileNetV2
+- Deployed Disease Runtime: LiteRT
+- Yield Model: Random Forest Regressor
+- Deployment: Docker on Render
+
+## Datasets
+- PlantVillage: leaf disease classification.
+- FAOSTAT: historical country/region crop-yield records.
+
+## Evaluation Results
+| Model | Metric | Result |
+|---|---|---|
+| Original MobileNetV2 | Test accuracy | 83.45% |
+| Original MobileNetV2 | Macro F1 | 83.47% |
+| Random Forest | R² | 0.657 |
+| Random Forest | MAE | 7,202.85 kg/ha |
+| Random Forest | RMSE | 13,220.11 kg/ha |
+
+Disease evaluation used 731 held-out images.
+The converted LiteRT model was checked on three sample images;
+full test-set evaluation of the converted model remains pending.
+
+## Demonstrated Output
+- Disease classification displayed through the dashboard.
+- India / Maize (corn) / 2016: 5,949.99 kg/ha.
+
+A disease prediction score is not the model's test accuracy.
 
 ## Limitations
-- Yield interface currently supports 2012–2016; future forecasting is not verified.
-- Live market data is unavailable.
+- Disease detection covers the supported classes, not all plants or diseases.
+- Current yield interface accepts years 2012–2016.
+- Yield estimates are historical, not validated future forecasts.
+- Live market information is unavailable.
 - Field-photo performance and database connectivity remain unverified.
-- Disease classification does not provide a treatment prescription.
+- The deployed website requires internet access.
 
-## Repository contents
-Application source, models and supporting reports are packaged in
-AgriVision_Render_Free.zip. The root Dockerfile extracts this archive
-and builds the frontend and backend.
+## Repository Structure
+- AgriVision_Render_Free.zip: source code, models and supporting reports.
+- Dockerfile: extracts the archive and builds the application.
+- LICENSE: project license.
+
+## Academic Purpose
+Developed as a college mini project to demonstrate machine
+learning integration with a web dashboard.
