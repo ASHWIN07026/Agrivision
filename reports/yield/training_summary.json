@@ -1,0 +1,18 @@
+{
+  "model_path": "D:\\AgriVision\\models\\yield\\faostat_random_forest_yield.joblib",
+  "metadata_path": "D:\\AgriVision\\models\\yield\\yield_metadata.json",
+  "test_split_start_year": 2012,
+  "train_rows": 631640,
+  "test_rows": 191205,
+  "target": "FAOSTAT Element=Yield converted to kg/hectare",
+  "baseline_linear_regression": {
+    "mae_kg_per_hectare": 7499.018006528818,
+    "rmse_kg_per_hectare": 20198.12814264533,
+    "r2": 0.1997415195064195
+  },
+  "random_forest_regressor": {
+    "mae_kg_per_hectare": 7202.8467707546015,
+    "rmse_kg_per_hectare": 13220.105355156027,
+    "r2": 0.6571707479377189
+  }
+}

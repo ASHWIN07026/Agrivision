@@ -1,0 +1,11 @@
+{
+  "status": "converted_from_verified_artifact",
+  "model_id": "plantvillage-mobilenetv2-tomato-potato-pepper-v1-litert-float32",
+  "model_path": "models/disease/disease_mobilenetv2.tflite",
+  "model_sha256": "70ea70dfeef4ca7c911236388ea1c568f573270d9c60cdcd6b53d12298693c9b",
+  "source_model_sha256": "2fb2dd28bc743891b0ae27ac88d2872a73505900aab26e4e4abdbca0264c9884",
+  "quantized": false,
+  "retrained": false,
+  "validation_scope": "Three supplied images only, all classes agree. Full-pipeline confidence differences reach 0.05391 due to JPEG decoding. The original 731-image evaluation was not rerun for LiteRT.",
+  "conversion_report": "conversion_validation.json"
+}

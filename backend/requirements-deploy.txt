@@ -1,0 +1,12 @@
+# Inference-only pins retained from the supplied training environment.
+fastapi==0.142.2
+uvicorn==0.54.0
+pydantic==2.13.5
+python-multipart==0.0.32
+scikit-learn==1.9.1
+numpy==2.5.3
+pandas==3.0.6
+scipy==1.18.1
+Pillow==12.3.0
+joblib==1.6.0
+ai-edge-litert==2.3.0

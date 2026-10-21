@@ -1,0 +1,10 @@
+{
+  "model_path": "D:\\AgriVision\\models\\disease\\disease_mobilenetv2.keras",
+  "metadata_path": "D:\\AgriVision\\models\\disease\\disease_metadata.json",
+  "test_accuracy": 0.8344733242134063,
+  "macro_precision": 0.8448494007517711,
+  "macro_recall": 0.8378494623655914,
+  "macro_f1": 0.8346866358710352,
+  "test_images": 731,
+  "inference_ms_per_image": 28.55555608755289
+}

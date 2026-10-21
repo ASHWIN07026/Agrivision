@@ -1,0 +1,23 @@
+# Validated in the D:\AgriVision\.venv Python 3.13 environment.
+fastapi==0.142.2
+uvicorn==0.54.0
+pydantic==2.13.5
+python-multipart==0.0.32
+
+# Local CPU inference and training.
+tensorflow-cpu==2.20.0
+keras==3.15.1
+scikit-learn==1.9.1
+numpy==2.5.3
+pandas==3.0.6
+scipy==1.18.1
+Pillow==12.3.0
+matplotlib==3.11.2
+joblib==1.6.0
+requests==2.34.2
+
+# Retained optional integrations. Model inference does not connect to either.
+SQLAlchemy==2.0.52
+pydantic-settings==2.15.0
+python-dotenv==1.2.4
+supabase==2.32.0

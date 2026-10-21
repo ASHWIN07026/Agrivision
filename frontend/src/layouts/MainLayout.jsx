@@ -1,0 +1,10 @@
+/**
+ * MainLayout – wraps every page with Navbar and a full-height background.
+ */
+export default function MainLayout({ children }) {
+  return (
+    <div className="main-layout">
+      {children}
+    </div>
+  );
+}
