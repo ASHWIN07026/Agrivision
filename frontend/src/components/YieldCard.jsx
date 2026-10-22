@@ -4,7 +4,7 @@ import { useI18n } from '../i18n/I18nContext';
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
-export default function YieldCard({ modelStatus, options }) {
+export default function YieldCard({ modelStatus, options, onPredictionComplete }) {
   const { t, locale } = useI18n();
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -40,6 +40,7 @@ export default function YieldCard({ modelStatus, options }) {
         throw new Error(data?.message || `Prediction failed (${response.status}).`);
       } else {
         setResult(data);
+        onPredictionComplete?.('yield', data, `${data.crop} · ${data.country} · ${data.year}`);
       }
     } catch (requestError) {
       setError(requestError.message || 'The yield model could not produce a prediction.');

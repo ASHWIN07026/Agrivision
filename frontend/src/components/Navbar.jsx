@@ -3,9 +3,12 @@ import LanguageSelect from './LanguageSelect';
 import { useI18n } from '../i18n/I18nContext';
 
 const PANELS = [
+  { id: 'dashboard', label: 'Dashboard' },
   { id: 'disease', labelKey: 'nav.disease' },
   { id: 'yield', labelKey: 'nav.yield' },
   { id: 'supplies', labelKey: 'nav.supplies' },
+  { id: 'history', label: 'History' },
+  { id: 'account', label: 'Account / Log in' },
 ];
 
 export default function Navbar({ activePanel, onPanelChange }) {
@@ -54,7 +57,7 @@ export default function Navbar({ activePanel, onPanelChange }) {
               onClick={() => selectPanel(panel)}
               onKeyDown={(event) => handleKeyDown(event, index)}
             >
-              {t(panel.labelKey)}
+              {panel.label || t(panel.labelKey)}
             </button>
           ))}
         </div>

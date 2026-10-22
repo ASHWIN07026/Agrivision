@@ -21,6 +21,7 @@ export default function LeafCareLookup({ prediction }) {
       </select>
     </div>
     {mode === 'auto' ? <div aria-live="polite">
+      {prediction?.from_history && <p className="warning-banner">Showing care for a saved history result. Analyze a new photo to check the current condition.</p>}
       <p className="scope-notice">Care follows the latest supported image result. A model label is not a confirmed diagnosis. Tomato varieties and Tulsi are not identified automatically.</p>
       {automaticProtocol ? <CareProtocol protocolId={automaticProtocol} title="Tomato — Early Blight: automatically selected care" />
         : <p className="result-note">{prediction?.status === 'ok'

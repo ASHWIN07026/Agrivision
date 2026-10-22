@@ -1,3 +1,5 @@
+import DetectedSupplies from './DetectedSupplies';
+import { useId } from 'react';
 import CareProtocol from './CareProtocol';
 import ShopSearch from './ShopSearch';
 import { useI18n } from '../i18n/I18nContext';
@@ -10,6 +12,7 @@ const TNAU_SEPTORIA = 'https://agritech.tnau.ac.in/crop_protection/tomato_diseas
 
 export default function DiseaseCare({ category }) {
   const { t } = useI18n();
+  const shopId = useId();
   if (!category || !category.includes('___')) return null;
   const healthy = category.endsWith('___healthy');
   const crop = category.startsWith('Potato') ? 'potato' : category.startsWith('Pepper') ? 'peppers' : 'tomato';
@@ -46,7 +49,8 @@ export default function DiseaseCare({ category }) {
       <p>{t('care.regionalNote')}</p>
       <h3>{t('care.supplies')}</h3>
       <ul>{supplies.map((item) => <li key={item}>{item}</li>)}</ul>
-      <ShopSearch idPrefix="care-location" />
+      <DetectedSupplies category={category} />
+      <ShopSearch idPrefix={shopId} />
     </section>
   );
 }

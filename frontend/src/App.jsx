@@ -1,4 +1,9 @@
-import { useEffect, useState } from 'react';
+import { AuthProvider, useAuth } from './account/AuthContext';
+import AccountPanel from './account/AccountPanel';
+import HistoryPanel from './account/HistoryPanel';
+import { historyRecord } from './account/history';
+import OverviewPanel from './components/OverviewPanel';
+import { useEffect, useRef, useState } from 'react';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import DiseaseCard from './components/DiseaseCard';
@@ -18,9 +23,30 @@ const INITIAL_STATUS = {
 };
 
 function Dashboard() {
+  const { client, user, recovery } = useAuth();
+  const [historyRevision, setHistoryRevision] = useState(0);
+  const [historyNotice, setHistoryNotice] = useState('');
+  const accountRef = useRef(null);
+  accountRef.current = user?.id;
+  useEffect(() => { setHistoryNotice(''); setDiseaseResult(null); }, [user?.id]);
+  useEffect(() => { if (recovery) setActivePanel('account'); }, [recovery]);
+  async function savePrediction(module, result, summary) {
+    const owner = user?.id;
+    const record = historyRecord(owner, module, result, summary);
+    if (!record || !client) return;
+    try {
+      const { error } = await client.from('user_prediction_history').insert(record);
+      if (accountRef.current !== owner) return;
+      setHistoryNotice(error ? 'Prediction completed, but history was not saved. Check database setup or your connection.' : 'Prediction saved to your private history.');
+      if (!error) setHistoryRevision(value => value + 1);
+    } catch {
+      if (accountRef.current === owner) setHistoryNotice('Prediction completed, but history could not be saved.');
+    }
+  }
+
   const [activePanel, setActivePanel] = useState(() => {
     const requested = new URLSearchParams(window.location.search).get('panel');
-    return ['disease', 'yield', 'supplies'].includes(requested) ? requested : 'disease';
+    return ['dashboard', 'history', 'account', 'disease', 'yield', 'supplies'].includes(requested) ? requested : 'dashboard';
   });
   const [modelStatus, setModelStatus] = useState(INITIAL_STATUS);
   const [yieldOptions, setYieldOptions] = useState(null);
@@ -66,6 +92,14 @@ function Dashboard() {
       <div className="dashboard-container">
         <Header modelStatus={modelStatus} apiError={apiError} />
         <main id="main-content" className="module-panels">
+          <section id="panel-dashboard" role="tabpanel" aria-labelledby="tab-dashboard" hidden={activePanel !== 'dashboard'}>
+            <OverviewPanel modelStatus={modelStatus} user={user} onNavigate={setActivePanel} historyNotice={historyNotice} />
+          </section>
+          <section id="panel-account" role="tabpanel" aria-labelledby="tab-account" hidden={activePanel !== 'account'}><AccountPanel /></section>
+          <section id="panel-history" role="tabpanel" aria-labelledby="tab-history" hidden={activePanel !== 'history'}>
+            <HistoryPanel revision={historyRevision} onLogin={() => setActivePanel('account')} onReview={(details) => { setDiseaseResult({ ...details, status: 'ok', from_history: true }); setActivePanel('disease'); }} />
+          </section>
+          {historyNotice && activePanel !== 'dashboard' && <p className="scope-notice" role="status">{historyNotice}</p>}
           <section
             id="panel-disease"
             className="tab-panel"
@@ -74,7 +108,7 @@ function Dashboard() {
             tabIndex={0}
             hidden={activePanel !== 'disease'}
           >
-            <DiseaseCard modelStatus={modelStatus} onResultChange={setDiseaseResult} />
+            <DiseaseCard modelStatus={modelStatus} onResultChange={setDiseaseResult} onPredictionComplete={savePrediction} />
             <LeafCareLookup prediction={diseaseResult} />
           </section>
           <section
@@ -85,7 +119,7 @@ function Dashboard() {
             tabIndex={0}
             hidden={activePanel !== 'yield'}
           >
-            <YieldCard modelStatus={modelStatus} options={yieldOptions} />
+            <YieldCard modelStatus={modelStatus} options={yieldOptions} onPredictionComplete={savePrediction} />
           </section>
           <section
             id="panel-supplies"
@@ -107,7 +141,7 @@ function Dashboard() {
 function App() {
   return (
     <I18nProvider>
-      <Dashboard />
+      <AuthProvider><Dashboard /></AuthProvider>
     </I18nProvider>
   );
 }

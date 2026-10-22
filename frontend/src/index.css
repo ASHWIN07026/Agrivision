@@ -955,3 +955,16 @@ a:hover {
     transition-duration: 0.01ms !important;
   }
 }
+
+.account-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
+.dashboard-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+.dashboard-tile { display: flex; flex-direction: column; gap: .5rem; text-align: left; padding: 1.3rem; border: 1px solid var(--border); border-radius: 12px; background: var(--green-050); color: var(--green-900); cursor: pointer; }
+.dashboard-tile span { color: var(--muted); }
+.history-record { padding: 1rem 0; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+.detected-supplies { border-top: 1px solid var(--border); margin-top: 1.2rem; padding-top: 1rem; }
+@media (max-width: 1000px) {
+  .navbar { flex-wrap: wrap; gap: .5rem; }
+  .navbar-main { min-width: 0; width: 100%; }
+  .navbar-links { overflow-x: auto; max-width: 100%; padding-bottom: .3rem; }
+  .navbar-links .nav-link { flex: 0 0 auto; white-space: nowrap; }
+}
