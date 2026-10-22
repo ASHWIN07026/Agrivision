@@ -4,6 +4,7 @@ import Header from './components/Header';
 import DiseaseCard from './components/DiseaseCard';
 import YieldCard from './components/YieldCard';
 import MarketCard from './components/MarketCard';
+import MarketplaceCard from './components/MarketplaceCard';
 import SuppliesCard from './components/SuppliesCard';
 import { I18nProvider } from './i18n/I18nContext';
 
@@ -94,6 +95,7 @@ function Dashboard() {
             hidden={activePanel !== 'supplies'}
           >
             <SuppliesCard />
+            <MarketplaceCard />
             <MarketCard modelStatus={modelStatus} />
           </section>
         </main>

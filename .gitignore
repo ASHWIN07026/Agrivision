@@ -219,3 +219,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Public validator is downloaded with a pinned revision and SHA-256 at build time.
+models/validation/*.onnx
+models/validation/*.download
+
+# Marketplace data is runtime-only.
+backend/data/
+*.sqlite3
+*.sqlite3-*

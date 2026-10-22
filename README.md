@@ -75,7 +75,7 @@ The Crop Disease Detection module uses computer vision and deep learning to iden
 **Current support:** 15 PlantVillage disease/healthy categories.
 
 The model does not currently support every agricultural crop or disease.
-The API validates image format, dimensions, selected crop, crop-label consistency, and a configurable confidence floor. It does **not** yet have a separate validated image-content model, so unrelated non-leaf photos can still receive a disease label. Do not treat those outputs as a diagnosis; an independently evaluated leaf/object validator and representative negative-image tests are still required.
+The API validates image format, dimensions, selected crop, and an independent offline CLIP content gate **before** disease inference. Rejected images have no disease label or confidence. The existing disease confidence floor and crop consistency check still apply after content validation. The gate passed the three supplied leaf samples and independent person, cat and bus photos; this small regression set is not broad accuracy validation. See `docs/verification-2026-10-22.md` for setup, tests and limitations.
 
 ### 🌾 3.2 Crop Yield Estimation
 
@@ -598,3 +598,7 @@ If you find AgriVision useful, consider giving the repository a star.
 <p align="center">
   Developed as an academic AI-Based Precision Agriculture Mini Project.
 </p>
+
+## Agriculture marketplace API
+
+AgriVision now includes its own agriculture-only listings, expiring seller offers and nearby registered-shop API, with an integrated supplies-page panel. It does not require a data.gov.in key. See [Marketplace API setup and limitations](docs/marketplace-api.md). Real submissions are required; no products, offers or shops are fabricated.

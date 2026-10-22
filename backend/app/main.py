@@ -14,8 +14,9 @@ from fastapi import FastAPI, File, Form, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, ImageOps, UnidentifiedImageError
 from app.ml.image_preprocessing import resize_rgb
+from app.services.image_validation import validate_leaf_candidate, validator_available, ValidatorUnavailable
 
 from app.ml.model_loader import (
     get_disease_classes,
@@ -26,15 +27,17 @@ from app.ml.model_loader import (
     model_status,
 )
 from app.services.market_service import MarketProviderError, get_market_price
+from app.api.marketplace import router as marketplace_router
 from app.services.yield_year_policy import year_policy, estimate_context
 
 app = FastAPI(title="AgriVision API")
+app.include_router(marketplace_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip() for origin in os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",") if origin.strip()],
     allow_credentials=False,
-    allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_methods=["GET", "POST", "DELETE"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 MAX_IMAGE_BYTES = 10 * 1024 * 1024
@@ -64,6 +67,8 @@ def health_check() -> dict:
     return {
         "status": "ok",
         "source": "verified local training artifacts",
+        "revision": os.environ.get("RENDER_GIT_COMMIT", "local"),
+        "leaf_validator_available": validator_available(),
         **status,
         "models": {
             "disease": "trained" if get_disease_model() is not None else "missing",
@@ -120,8 +125,14 @@ async def predict_disease(file: UploadFile = File(...), crop: str = Form(...)):
         with Image.open(io.BytesIO(image_bytes)) as source:
             if source.width * source.height > 4_000_000:
                 return JSONResponse(status_code=413, content={"status": "error", "message": "Resize the image to at most 4 megapixels."})
-            image_array = resize_rgb(np.asarray(source.convert("RGB")), height, width)
-    except (UnidentifiedImageError, OSError, ValueError):
+            rgb = ImageOps.exif_transpose(source).convert("RGB")
+            validation_error = validate_leaf_candidate(rgb)
+            if validation_error:
+                return JSONResponse(status_code=422, content={"status": "invalid_image", "code": "invalid_leaf_image", "message": validation_error})
+            image_array = resize_rgb(np.asarray(rgb), height, width)
+    except ValidatorUnavailable as exc:
+        return JSONResponse(status_code=503, content={"status": "error", "code": "leaf_validator_unavailable", "message": str(exc)})
+    except (UnidentifiedImageError, Image.DecompressionBombError, OSError, ValueError):
         return JSONResponse(
             status_code=400,
             content={"status": "error", "message": "Unsupported or corrupt image. Upload a valid JPG or PNG."},
@@ -135,7 +146,8 @@ async def predict_disease(file: UploadFile = File(...), crop: str = Form(...)):
         return JSONResponse(status_code=500, content={"status": "error", "message": "Disease inference failed."})
     inference_ms = (time.perf_counter() - start) * 1000.0
     class_names = get_disease_classes()
-    if len(probabilities) != len(class_names):
+    if (len(probabilities) != len(class_names) or not np.all(np.isfinite(probabilities))
+            or np.any(probabilities < 0) or not np.isclose(np.sum(probabilities), 1, atol=0.01)):
         return JSONResponse(
             status_code=500,
             content={"status": "error", "message": "Model output does not match its saved class mapping."},
@@ -278,7 +290,7 @@ def market_price(
 @app.get("/api/ready")
 def readiness_check():
     status = model_status()
-    ready = status["disease_model_available"] and status["yield_model_available"]
+    ready = status["disease_model_available"] and status["yield_model_available"] and validator_available()
     return JSONResponse(status_code=200 if ready else 503, content={"ready": ready, **status})
 
 

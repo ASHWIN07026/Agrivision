@@ -110,6 +110,22 @@ class MarketServiceTests(unittest.TestCase):
             get_market_price("Tomato", observed_date="17/06/2026")
         self.assertEqual(invalid_date.exception.code, "invalid_date")
 
+    def test_invalid_prices_or_dates_are_not_displayed(self):
+        from app.services.market_service import _format_record
+        record = dict(commodity='Tomato', state='Tamil Nadu', district='Coimbatore',
+                      market='Pollachi', arrival_date='22/10/2026',
+                      min_price='100', max_price='300', modal_price='200')
+        for changes in [dict(modal_price='NaN'), dict(modal_price='400'),
+                        dict(min_price='-1'), dict(arrival_date='invalid')]:
+            self.assertIsNone(_format_record({**record, **changes}))
+
+    def test_malformed_provider_response(self):
+        with patch.dict(os.environ, {'DATA_GOV_IN_API_KEY':'test-key'}):
+            for payload in [b'not json', b'[]', b'{"records":null}']:
+                with patch('app.services.market_service.urlopen', return_value=io.BytesIO(payload)):
+                    with self.assertRaises(MarketProviderError):
+                        get_market_price('Tomato')
+
 
 if __name__ == "__main__":
     unittest.main()

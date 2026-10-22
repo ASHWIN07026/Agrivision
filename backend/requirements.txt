@@ -21,3 +21,5 @@ SQLAlchemy==2.0.52
 pydantic-settings==2.15.0
 python-dotenv==1.2.4
 supabase==2.32.0
+
+onnxruntime==1.31.0

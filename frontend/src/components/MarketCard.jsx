@@ -16,6 +16,7 @@ export default function MarketCard({ modelStatus }) {
     event.preventDefault();
     setLoading(true);
     setError('');
+    setResult(null);
     const formData = new FormData(event.currentTarget);
     const crop = formData.get('crop');
 

@@ -1,0 +1,12 @@
+{
+  "source": "https://huggingface.co/Xenova/clip-vit-base-patch32",
+  "revision": "d15189d7028b43f1d3e65039190477f6af591c2a",
+  "vision_url": "https://huggingface.co/Xenova/clip-vit-base-patch32/resolve/d15189d7028b43f1d3e65039190477f6af591c2a/onnx/vision_model_quantized.onnx",
+  "sha256": {
+    "vision_model_quantized.onnx": "583fd1110a514667812fee7d684952aaf82a99b959760c8d7dca7e0ab9839299",
+    "text_embeddings.json": "46059e40dd4f2253b1184ea56661c8b88a4cecb82d0274388eddcbfc8c7145d4"
+  },
+  "minimum_similarity": 0.24,
+  "minimum_margin": 0.025,
+  "scope": "Zero-shot content rejection; not botanical species identification or a calibrated probability."
+}

@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 API_URL = "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070"
 API_KEY_ENV = "DATA_GOV_IN_API_KEY"
 SOURCE_NAME = "AGMARKNET via data.gov.in"
-SOURCE_URL = "https://www.data.gov.in/"
+SOURCE_URL = "https://www.data.gov.in/resource/current-daily-price-various-commodities-various-markets-mandi"
 REQUEST_TIMEOUT_SECONDS = 10
 MAX_RESPONSE_BYTES = 2 * 1024 * 1024
 
@@ -85,6 +85,14 @@ def _format_record(record: dict) -> dict | None:
     if not all((commodity, state, district, market, arrival_date)):
         return None
 
+    prices = [_number(_field(fields, name, name + "rsquintal")) for name in ("minprice", "maxprice", "modalprice")]
+    if any(value is None for value in prices):
+        return None
+    if not prices[0] <= prices[2] <= prices[1]:
+        return None
+    if _record_date_key({"arrival_date": arrival_date}) == date.min:
+        return None
+
     return {
         "commodity": commodity,
         "variety": _field(fields, "variety"),
@@ -98,7 +106,7 @@ def _format_record(record: dict) -> dict | None:
         "price_unit": "INR/quintal",
         "source": SOURCE_NAME,
         "source_url": SOURCE_URL,
-        "freshness": "Latest published mandi observation; not real-time.",
+        "freshness": "Published mandi observation; check its date; not real-time.",
     }
 
 
@@ -144,6 +152,7 @@ def get_market_price(
         ("api-key", api_key),
         ("format", "json"),
         ("limit", "100"),
+        ("sort[arrival_date]", "desc"),
         ("filters[commodity]", commodity),
     ]
     if state:
@@ -225,7 +234,7 @@ def get_market_price(
             "commodity": commodity,
             "records": [],
             "source": SOURCE_NAME,
-            "freshness": "Latest published mandi observations; not real-time.",
+            "freshness": "Published mandi observations; check their dates; not real-time.",
         }
 
     return {
@@ -234,5 +243,5 @@ def get_market_price(
         "commodity": commodity,
         "records": records,
         "source": SOURCE_NAME,
-        "freshness": "Latest published mandi observations; not real-time.",
+        "freshness": "Published mandi observations; check their dates; not real-time.",
     }

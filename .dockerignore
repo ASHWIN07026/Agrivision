@@ -1,0 +1,9 @@
+.git
+**/node_modules
+**/__pycache__
+**/.env
+**/.env.*
+frontend/dist
+AgriVision_Render_Free.zip
+models/validation/*.onnx
+models/validation/*.download
