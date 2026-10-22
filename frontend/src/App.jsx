@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import DiseaseCard from './components/DiseaseCard';
+import LeafCareLookup from './components/LeafCareLookup';
 import YieldCard from './components/YieldCard';
 import MarketplaceCard from './components/MarketplaceCard';
 import SuppliesCard from './components/SuppliesCard';
@@ -73,6 +74,7 @@ function Dashboard() {
             hidden={activePanel !== 'disease'}
           >
             <DiseaseCard modelStatus={modelStatus} />
+            <LeafCareLookup />
           </section>
           <section
             id="panel-yield"

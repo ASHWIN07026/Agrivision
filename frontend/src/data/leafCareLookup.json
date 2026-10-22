@@ -1,0 +1,244 @@
+{
+  "version": 1,
+  "scope": "Manual care reference for the seven requested leaf names and two issues only. Not an expansion of the image classifier.",
+  "leaf_names": [
+    "Blueberry Cherry Tomato Leaf",
+    "Chocolate Cherry Tomato Leaf",
+    "Oval Cherry Tomato Leaf",
+    "Snow White Cherry Tomato Leaf",
+    "Spoon Tomato Leaf",
+    "Yellow Pear Tomato Leaf",
+    "Holy Basil (Tulsi) Leaf"
+  ],
+  "issues": [
+    "Early Blight",
+    "Powdery Mildew"
+  ],
+  "entries": [
+    {
+      "leaf_name": "Blueberry Cherry Tomato Leaf",
+      "issue": "Early Blight",
+      "protocol_id": "tomato_early_blight",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Blueberry Cherry Tomato Leaf",
+      "issue": "Powdery Mildew",
+      "protocol_id": "tomato_powdery_mildew",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Chocolate Cherry Tomato Leaf",
+      "issue": "Early Blight",
+      "protocol_id": "tomato_early_blight",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Chocolate Cherry Tomato Leaf",
+      "issue": "Powdery Mildew",
+      "protocol_id": "tomato_powdery_mildew",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Oval Cherry Tomato Leaf",
+      "issue": "Early Blight",
+      "protocol_id": "tomato_early_blight",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Oval Cherry Tomato Leaf",
+      "issue": "Powdery Mildew",
+      "protocol_id": "tomato_powdery_mildew",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Snow White Cherry Tomato Leaf",
+      "issue": "Early Blight",
+      "protocol_id": "tomato_early_blight",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Snow White Cherry Tomato Leaf",
+      "issue": "Powdery Mildew",
+      "protocol_id": "tomato_powdery_mildew",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Spoon Tomato Leaf",
+      "issue": "Early Blight",
+      "protocol_id": "tomato_early_blight",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Spoon Tomato Leaf",
+      "issue": "Powdery Mildew",
+      "protocol_id": "tomato_powdery_mildew",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Yellow Pear Tomato Leaf",
+      "issue": "Early Blight",
+      "protocol_id": "tomato_early_blight",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Yellow Pear Tomato Leaf",
+      "issue": "Powdery Mildew",
+      "protocol_id": "tomato_powdery_mildew",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Holy Basil (Tulsi) Leaf",
+      "issue": "Early Blight",
+      "protocol_id": "tulsi_early_blight",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    },
+    {
+      "leaf_name": "Holy Basil (Tulsi) Leaf",
+      "issue": "Powdery Mildew",
+      "protocol_id": "tulsi_powdery_mildew",
+      "mode": "manual_reference",
+      "image_prediction_supported": false
+    }
+  ],
+  "protocols": {
+    "tomato_early_blight": {
+      "summary": "Manage confirmed Early Blight and protect healthy growth; dead or spotted tissue will not turn healthy again.",
+      "evidence_note": "General tomato guidance. These sources do not establish different treatment rates or resistance for the six named tomato varieties.",
+      "start_steps": [
+        "Confirm the diagnosis: Early Blight commonly starts on older lower leaves with brown spots and concentric rings. Similar-looking problems require local agricultural advice.",
+        "When foliage is dry, remove badly affected lower leaves without stripping the plant. Bag diseased debris and clean cutting tools before moving to another plant.",
+        "Mulch bare soil, support the plant, improve spacing and water at the soil surface to reduce splash onto leaves."
+      ],
+      "organic_steps": [
+        "Choose a copper fungicide labelled for tomato Early Blight and approved for your organic production standard. Organic approval is product-specific; copper is still a pesticide.",
+        "Use it early to protect healthy foliage. Follow the preparation and spraying method below and the exact product label; it does not repair established lesions."
+      ],
+      "chemical_steps": [
+        "As an alternative, use a locally registered tomato Early Blight fungicide, such as chlorothalonil only where the current label permits this crop and disease.",
+        "Apply at the label rate, coverage and repeat interval. Observe its maximum applications, re-entry interval and pre-harvest interval; do not automatically combine it with the organic option."
+      ],
+      "follow_up_steps": [
+        "Record the product, dose and application date. Inspect new growth between treatments; follow the label for repeat spraying rather than increasing the concentration.",
+        "If disease continues to spread rapidly, ask a local agricultural extension service to verify the diagnosis and management plan."
+      ],
+      "source_ids": [
+        "early_blight",
+        "early_blight_options"
+      ]
+    },
+    "tomato_powdery_mildew": {
+      "summary": "Suppress confirmed Powdery Mildew and protect new foliage; this is management guidance, not a guaranteed cure.",
+      "evidence_note": "General tomato/vegetable guidance; no variety-specific efficacy or dose is established here.",
+      "start_steps": [
+        "Confirm Powdery Mildew: white powdery patches can develop on leaves, but some tomato infections mainly cause yellow patches. Seek advice if the symptoms do not match.",
+        "Remove a few heavily affected leaves, give plants suitable sunlight and improve airflow without over-pruning. Avoid excessive nitrogen fertilizer."
+      ],
+      "organic_steps": [
+        "For a mild confirmed infection, choose an organically approved neem-oil fungicide explicitly labelled for tomato Powdery Mildew. Follow its instructions and test a small area if the label directs.",
+        "Cover the affected and susceptible leaf surfaces as directed, during cool suitable conditions. Avoid oils on heat- or water-stressed plants and when temperatures exceed about 32°C (90°F), or any stricter label limit."
+      ],
+      "chemical_steps": [
+        "As an alternative, use tomato-labelled wettable sulfur primarily to prevent new infections or protect new foliage; it should not be described as repairing an established infection.",
+        "Do not mix sulfur with oil sprays. Separate them by at least two weeks, or longer if either label requires; avoid sulfur near or above 32°C (90°F) and on stressed plants."
+      ],
+      "follow_up_steps": [
+        "Recheck new growth and powdery patches between applications. Repeat only at the product label interval and respect the harvest/re-entry restrictions.",
+        "Persistent or severe infection needs local crop-specific advice; do not add stronger doses or homemade detergents."
+      ],
+      "source_ids": [
+        "powdery_mildew"
+      ]
+    },
+    "tulsi_early_blight": {
+      "summary": "Diagnosis requires confirmation: do not automatically transfer tomato Early Blight to Holy Basil (Tulsi).",
+      "evidence_note": "Available basil references discuss several leaf-spot diseases and primarily concern sweet basil (Ocimum basilicum), not confirmed tomato-type Early Blight on Tulsi (Ocimum tenuiflorum). This entry is not a validated Tulsi disease-treatment pairing.",
+      "start_steps": [
+        "Take clear photos of both leaf surfaces and the whole plant; ask a local agricultural extension service to identify the cause before using a fungicide.",
+        "Remove a few affected leaves with clean tools, avoid handling wet foliage, improve airflow and water at the base."
+      ],
+      "organic_steps": [
+        "Use sanitation and growing-condition changes first. A biological/organic pesticide is an option only if its current local label explicitly covers Tulsi and the identified disease.",
+        "A product labelled for tomatoes, ornamental plants or sweet basil is not automatically authorised for Tulsi; obtain crop-specific advice before applying it."
+      ],
+      "chemical_steps": [
+        "There is no verified exact chemical cure provided for this Tulsi/Early Blight combination. Do not apply the tomato treatment schedule to Tulsi.",
+        "After diagnosis, use a chemical fungicide only when locally registered for Tulsi and that disease, following its application, re-entry and edible-leaf harvest restrictions."
+      ],
+      "follow_up_steps": [
+        "Keep a record of symptoms and any treatment. Monitor new growth and avoid harvesting treated leaves until the relevant label permits it."
+      ],
+      "source_ids": [
+        "basil",
+        "herb_diseases"
+      ]
+    },
+    "tulsi_powdery_mildew": {
+      "summary": "Confirm Powdery Mildew on Tulsi before selecting a product; general basil information is not a Tulsi pesticide approval.",
+      "evidence_note": "Crop-specific product registration and efficacy for Holy Basil are not established by this lookup. Sweet-basil advice must not be assumed to apply to Tulsi.",
+      "start_steps": [
+        "Have white growth or yellowing checked if the diagnosis is uncertain; appearance alone does not establish the organism.",
+        "Remove heavily affected leaves sparingly, improve light and airflow, and avoid excessive nitrogen or prolonged leaf wetness."
+      ],
+      "organic_steps": [
+        "Use cultural measures first. An organically approved biological fungicide is an option only when its label specifically permits Tulsi and Powdery Mildew.",
+        "Do not substitute homemade soap, baking-soda or neem mixtures for a registered product; edible herb leaves can be injured or left with unsuitable residues."
+      ],
+      "chemical_steps": [
+        "A formulated fungicide such as potassium bicarbonate may be considered only if the current local label explicitly lists Tulsi and Powdery Mildew; this lookup does not establish that such a product is registered locally.",
+        "If no suitable Tulsi-labelled product is available, continue nonchemical management and obtain local extension advice rather than borrowing tomato or ornamental-plant instructions."
+      ],
+      "follow_up_steps": [
+        "Recheck new leaves after management changes. For any labelled treatment, follow the repeat interval and edible-leaf harvest restrictions; washing does not replace the pre-harvest interval."
+      ],
+      "source_ids": [
+        "basil",
+        "powdery_mildew",
+        "herb_diseases"
+      ]
+    }
+  },
+  "application_steps": [
+    "Read the complete current label before buying or opening the product: crop, disease, dilution, mixing order, coverage, maximum applications, harvest waiting period and re-entry requirements must all match.",
+    "Wear the label-required protective equipment and keep children and animals away. Use dedicated measuring equipment and a clean sprayer; do not use kitchen utensils.",
+    "For a concentrate requiring dilution, measure the label dose for the chosen water volume and follow the stated mixing order. If the label gives a per-litre rate, required product = label rate × litres of water; do not dilute a ready-to-use product unless directed.",
+    "Spray only the plant parts and surfaces specified by the label, evenly and without drift. Choose suitable calm conditions and respect heat/rain restrictions, especially for oil and sulfur products.",
+    "Choose one suitable treatment route rather than mixing organic and chemical products. Tank-mix only when both labels explicitly allow the combination and crop.",
+    "Clean the equipment and dispose of leftovers as the label instructs, away from drains or water sources. Record the treatment and follow its re-entry and pre-harvest intervals."
+  ],
+  "sources": {
+    "early_blight": {
+      "title": "UC IPM: Tomato Early Blight",
+      "url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/"
+    },
+    "early_blight_options": {
+      "title": "WVU Extension: Early Blight of Tomatoes",
+      "url": "https://extension.wvu.edu/lawn-gardening-pests/plant-disease/fruit-vegetable-diseases/early-blight-of-tomatoes"
+    },
+    "powdery_mildew": {
+      "title": "UC IPM: Powdery Mildew on Vegetables",
+      "url": "https://ipm.ucanr.edu/home-and-landscape/powdery-mildew-on-vegetables/"
+    },
+    "basil": {
+      "title": "Clemson Extension: Basil (sweet basil; not a Tulsi-specific pesticide label)",
+      "url": "https://hgic.clemson.edu/factsheet/basil/"
+    },
+    "herb_diseases": {
+      "title": "UConn IPM: Diseases of herb bedding plants",
+      "url": "https://ipm.cahnr.uconn.edu/herbs-greenhouse/"
+    }
+  }
+}
