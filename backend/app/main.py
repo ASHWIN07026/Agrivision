@@ -28,10 +28,12 @@ from app.ml.model_loader import (
 )
 from app.services.market_service import MarketProviderError, get_market_price
 from app.api.marketplace import router as marketplace_router
+from app.services.shop_provider import router as shop_router
 from app.services.yield_year_policy import year_policy, estimate_context
 
 app = FastAPI(title="AgriVision API")
 app.include_router(marketplace_router)
+app.include_router(shop_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip() for origin in os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",") if origin.strip()],
@@ -69,6 +71,7 @@ def health_check() -> dict:
         "source": "verified local training artifacts",
         "revision": os.environ.get("RENDER_GIT_COMMIT", "local"),
         "leaf_validator_available": validator_available(),
+        "shop_provider_configured": bool(os.environ.get("GEOAPIFY_API_KEY", "").strip()),
         **status,
         "models": {
             "disease": "trained" if get_disease_model() is not None else "missing",
