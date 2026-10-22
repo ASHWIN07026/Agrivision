@@ -36,6 +36,16 @@ class ApiTests(unittest.TestCase):
                 self.assertEqual(response.status_code, 200, response.text)
                 self.assertEqual(response.json()['disease'], label)
 
+    def test_automatic_crop_and_default(self):
+        for crop, sample in [('tomato', 'tomato_healthy.jpg'), ('potato', 'potato_early_blight.jpg'), ('pepper', 'pepper_bacterial_spot.jpg')]:
+            image = (ROOT / 'samples' / sample).read_bytes()
+            response = self.post_image(image, 'auto')
+            self.assertEqual(response.status_code, 200, response.text)
+            self.assertEqual(response.json()['crop'], crop)
+        response = self.client.post('/api/disease/predict', files={'file': ('photo.jpg', image, 'image/jpeg')})
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()['crop'], 'pepper')
+
     def assert_no_prediction(self, response):
         self.assertGreaterEqual(response.status_code, 400)
         self.assertNotIn('disease', response.json())
@@ -70,7 +80,7 @@ class ApiTests(unittest.TestCase):
             self.skipTest('Set AGRIVISION_NEGATIVE_FIXTURES to downloaded person/cat/bus fixtures')
         for filename in ['person.png', 'cat.png', 'bus.jpg']:
             with self.subTest(filename=filename), patch('app.main.get_disease_model') as loader:
-                response = self.post_image((Path(directory) / filename).read_bytes())
+                response = self.post_image((Path(directory) / filename).read_bytes(), 'auto')
                 self.assertEqual(response.status_code, 422, response.text)
                 self.assert_no_prediction(response)
                 loader.return_value.predict.assert_not_called()

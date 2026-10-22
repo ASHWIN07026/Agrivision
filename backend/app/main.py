@@ -98,17 +98,17 @@ def yield_options():
 
 
 @app.post("/api/disease/predict")
-async def predict_disease(file: UploadFile = File(...), crop: str = Form(...)):
+async def predict_disease(file: UploadFile = File(...), crop: str = Form("auto")):
     model = get_disease_model()
     if model is None:
         return JSONResponse(status_code=503, content=_disease_not_trained())
-    if crop not in {"tomato", "potato", "pepper"}:
+    if crop not in {"auto", "tomato", "potato", "pepper"}:
         return JSONResponse(
             status_code=422,
             content={
                 "status": "error",
                 "code": "unsupported_crop",
-                "message": "Choose tomato, potato, or bell pepper.",
+                "message": "Choose automatic detection, tomato, potato, or bell pepper.",
             },
         )
 
@@ -188,7 +188,7 @@ async def predict_disease(file: UploadFile = File(...), crop: str = Form(...)):
         if disease.lower().startswith(("pepper", "bell"))
         else None
     )
-    if predicted_crop != crop:
+    if predicted_crop is None or (crop != "auto" and predicted_crop != crop):
         return JSONResponse(
             status_code=422,
             content={
@@ -200,6 +200,7 @@ async def predict_disease(file: UploadFile = File(...), crop: str = Form(...)):
     return {
         "status": "ok",
         "disease": disease,
+        "crop": predicted_crop,
         "confidence": confidence,
         "confidence_kind": "softmax score; not test accuracy",
         "model_id": get_disease_metadata().get("model_id"),

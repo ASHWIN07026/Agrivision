@@ -1,3 +1,4 @@
+import CareProtocol from './CareProtocol';
 import ShopSearch from './ShopSearch';
 import { useI18n } from '../i18n/I18nContext';
 
@@ -39,6 +40,7 @@ export default function DiseaseCare({ category }) {
     <section className="result-note care-details" aria-label={t('disease.careDetails')}>
       <h3>{healthy ? t('care.healthyTitle') : t('care.nextTitle')}</h3>
       <p>{t('care.disclaimer')}</p>
+      {category === 'Tomato___Early_blight' && <CareProtocol protocolId="tomato_early_blight" title="Tomato — Early Blight: step-by-step care" />}
       <ol>{steps.map((step) => <li key={step}>{step}</li>)}</ol>
       <p><a href={source} target="_blank" rel="noopener noreferrer">{t('care.cropGuide')}</a></p>
       <p>{t('care.regionalNote')}</p>

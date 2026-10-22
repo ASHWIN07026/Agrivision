@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ResultBox from './ResultBox';
 import DiseaseCare from './DiseaseCare';
+import { prepareCameraPhoto } from '../utils/cameraPhoto';
 import { useI18n } from '../i18n/I18nContext';
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
@@ -32,7 +33,9 @@ export default function DiseaseCard({ modelStatus }) {
   const { t, locale } = useI18n();
   const [imagePreview, setImagePreview] = useState(null);
   const [fileName, setFileName] = useState('');
-  const [selectedCrop, setSelectedCrop] = useState('');
+  const [selectedCrop, setSelectedCrop] = useState('auto');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const cameraInput = useRef(null);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -42,17 +45,26 @@ export default function DiseaseCard({ modelStatus }) {
     return () => URL.revokeObjectURL(imagePreview);
   }, [imagePreview]);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files?.[0];
+  const handleImageChange = async (event, fromCamera = false) => {
+    const original = event.target.files?.[0];
+    event.target.value = '';
+    if (!original) return;
     setResult(null);
     setError('');
-    if (!file) {
-      setImagePreview(null);
-      setFileName('');
-      return;
+    setSelectedFile(null);
+    setImagePreview(null);
+    setFileName('');
+    setLoading(true);
+    try {
+      const file = fromCamera ? await prepareCameraPhoto(original) : original;
+      setSelectedFile(file);
+      setFileName(file.name);
+      setImagePreview(URL.createObjectURL(file));
+    } catch (photoError) {
+      setError(photoError.message || 'Could not read this photo. Try a JPG or PNG.');
+    } finally {
+      setLoading(false);
     }
-    setFileName(file.name);
-    setImagePreview(URL.createObjectURL(file));
   };
 
   const handleCropChange = (event) => {
@@ -66,11 +78,11 @@ export default function DiseaseCard({ modelStatus }) {
     event.preventDefault();
     setResult(null);
     setError('');
-    if (!['tomato', 'potato', 'pepper'].includes(selectedCrop)) {
+    if (!['auto', 'tomato', 'potato', 'pepper'].includes(selectedCrop)) {
       setError('unsupported-crop');
       return;
     }
-    const file = event.currentTarget.elements.namedItem('leaf-image')?.files?.[0];
+    const file = selectedFile;
     if (!file) {
       setError(t('disease.fileError'));
       return;
@@ -145,9 +157,9 @@ export default function DiseaseCard({ modelStatus }) {
                 className="form-control"
                 value={selectedCrop}
                 onChange={handleCropChange}
-                required
+                disabled={loading}
               >
-                <option value="">{t('disease.chooseCrop')}</option>
+                <option value="auto">Auto-detect supported crop</option>
                 <option value="tomato">{t('disease.tomato')}</option>
                 <option value="potato">{t('disease.potato')}</option>
                 <option value="pepper">{t('disease.pepper')}</option>
@@ -180,15 +192,23 @@ export default function DiseaseCard({ modelStatus }) {
                   type="file"
                   accept=".jpg,.jpeg,.png,image/jpeg,image/png"
                   onChange={handleImageChange}
-                  required
+                  disabled={loading}
                 />
               </div>
             </div>
 
+            <input ref={cameraInput} type="file" accept="image/jpeg,image/png" capture="environment"
+              hidden disabled={loading} aria-label="Take a leaf photo"
+              onChange={(event) => handleImageChange(event, true)} />
+            <button className="btn" type="button" disabled={loading} onClick={() => cameraInput.current?.click()}>
+              Take photo
+            </button>
+            <p className="field-hint">Use your rear camera for a close-up leaf photo. If camera capture is unavailable, upload a photo. Large camera photos are resized before analysis.</p>
+            <p className="field-hint">Automatic detection covers tomato, potato and bell pepper only; it cannot identify tomato varieties, Tulsi or Powdery Mildew.</p>
             <button
               className="btn btn-primary"
               type="submit"
-              disabled={loading || !['tomato', 'potato', 'pepper'].includes(selectedCrop)}
+              disabled={loading || !['auto', 'tomato', 'potato', 'pepper'].includes(selectedCrop)}
             >
               {loading ? (
                 <span className="btn-loading"><span className="spinner" />{t('disease.analyzing')}</span>
@@ -242,7 +262,7 @@ export default function DiseaseCard({ modelStatus }) {
                       <span className="result-value">{Number(result.inference_ms).toFixed(1)} ms</span>
                     </div>
                   </details>
-                  <details className="disclosure">
+                  <details className="disclosure" open key={result.disease}>
                     <summary>{t('disease.careDetails')}</summary>
                     {result.guidance && <p className="result-note">{result.guidance}</p>}
                     <DiseaseCare category={result.disease} />
