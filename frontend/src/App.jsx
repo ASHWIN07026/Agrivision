@@ -25,6 +25,7 @@ function Dashboard() {
   const [modelStatus, setModelStatus] = useState(INITIAL_STATUS);
   const [yieldOptions, setYieldOptions] = useState(null);
   const [apiError, setApiError] = useState('');
+  const [diseaseResult, setDiseaseResult] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -73,8 +74,8 @@ function Dashboard() {
             tabIndex={0}
             hidden={activePanel !== 'disease'}
           >
-            <DiseaseCard modelStatus={modelStatus} />
-            <LeafCareLookup />
+            <DiseaseCard modelStatus={modelStatus} onResultChange={setDiseaseResult} />
+            <LeafCareLookup prediction={diseaseResult} />
           </section>
           <section
             id="panel-yield"

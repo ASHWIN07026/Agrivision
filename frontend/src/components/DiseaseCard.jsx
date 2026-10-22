@@ -29,7 +29,7 @@ export function formatCategory(category, t) {
   return `${t(cropKey)} — ${t(conditionKeys[condition]) || condition.replaceAll('_', ' ')}`;
 }
 
-export default function DiseaseCard({ modelStatus }) {
+export default function DiseaseCard({ modelStatus, onResultChange }) {
   const { t, locale } = useI18n();
   const [imagePreview, setImagePreview] = useState(null);
   const [fileName, setFileName] = useState('');
@@ -39,6 +39,10 @@ export default function DiseaseCard({ modelStatus }) {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    onResultChange?.(result?.status === 'ok' ? result : null);
+  }, [result, onResultChange]);
 
   useEffect(() => {
     if (!imagePreview) return undefined;

@@ -21,3 +21,7 @@ A successful prediction opens its existing care guidance automatically. Tomato E
 “Take photo” uses the browser's native rear-camera file capture hint; browser support varies and desktops may show a file picker. Captured JPG/PNG photos are resized to a maximum edge of 1600 pixels when needed before upload. Gallery uploads retain their original handling. Capture cancellation leaves the previous selection unchanged. Physical Android camera behavior must be checked on a device after deployment.
 
 Checks: `node --test frontend/tests/cameraPhoto.test.js`, `npm run build --prefix frontend`, and the backend unittest suite, including automatic crop classification, explicit crop mismatch, invalid images and negative photo rejection.
+
+## Automatic lookup response
+
+The lookup defaults to “Automatically use the image result.” The latest successful classification is shared from the disease card: tomato Early Blight uses the detailed reference protocol; other trained classes display the existing crop-specific care guidance. New uploads, crop changes and new analysis clear the previous automatic response. Manual mode retains all seven leaf names and both confirmed care topics, and responds immediately after selection. No cultivar, Tulsi or Powdery Mildew identification is added.
