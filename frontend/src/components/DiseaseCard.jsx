@@ -6,7 +6,7 @@ import { useI18n } from '../i18n/I18nContext';
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 
-function formatCategory(category, t) {
+export function formatCategory(category, t) {
   const [crop, condition] = category.split('___');
   const cropKey = crop.startsWith('Tomato')
     ? 'crop.tomato'
@@ -29,7 +29,7 @@ function formatCategory(category, t) {
 }
 
 export default function DiseaseCard({ modelStatus }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [imagePreview, setImagePreview] = useState(null);
   const [fileName, setFileName] = useState('');
   const [selectedCrop, setSelectedCrop] = useState('');
@@ -92,6 +92,7 @@ export default function DiseaseCard({ modelStatus }) {
     try {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('crop', selectedCrop);
       const response = await fetch(`${API_BASE}/api/disease/predict`, { method: 'POST', body: formData });
       const data = await response.json();
       if (data?.status === 'not_trained') {
@@ -121,6 +122,7 @@ export default function DiseaseCard({ modelStatus }) {
       </div>
 
       <p className="scope-notice">{t('disease.support')}</p>
+      <p className="warning-banner" role="note">{t('disease.validationWarning')}</p>
 
       {modelStatus?.disease_supported_categories?.length > 0 && (
         <details className="disclosure">
@@ -215,7 +217,9 @@ export default function DiseaseCard({ modelStatus }) {
                 <>
                   <div className="result-row">
                     <span className="result-label">{t('disease.score')}</span>
-                    <span className="result-value">{confidence.toFixed(1)}%</span>
+                    <span className="result-value">
+                      {confidence.toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%
+                    </span>
                   </div>
                   <div
                     className="confidence-bar-bg"

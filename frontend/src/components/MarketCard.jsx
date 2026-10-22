@@ -10,7 +10,7 @@ export default function MarketCard({ modelStatus }) {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const marketAvailable = modelStatus?.market_data_available === true;
+  const marketConfigured = modelStatus?.market_api_configured === true;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,10 +18,13 @@ export default function MarketCard({ modelStatus }) {
     setError('');
     const formData = new FormData(event.currentTarget);
     const crop = formData.get('crop');
-    const region = formData.get('region') || 'India';
 
     try {
-      const query = new URLSearchParams({ crop, region });
+      const query = new URLSearchParams({ crop });
+      for (const field of ['state', 'district', 'market', 'date']) {
+        const value = formData.get(field);
+        if (value) query.set(field, value);
+      }
       const response = await fetch(`${API_BASE}/api/market/price?${query}`);
       const data = await response.json();
       if (!response.ok) throw new Error(data?.message || `Market request failed (${response.status}).`);
@@ -40,13 +43,13 @@ export default function MarketCard({ modelStatus }) {
           <h2 className="card-title" id="market-title">{t('market.title')}</h2>
           <p className="card-subtitle">{t('market.subtitle')}</p>
         </div>
-        <span className={`status-pill ${marketAvailable ? 'status-ready' : 'status-pending'}`} role="status">
-          {marketAvailable ? t('status.ready') : t('status.marketUnavailable')}
+        <span className={`status-pill ${marketConfigured ? 'status-ready' : 'status-pending'}`} role="status">
+          {marketConfigured ? t('market.providerConfigured') : t('status.marketUnavailable')}
         </span>
       </div>
-      {!marketAvailable && (
+      {!marketConfigured && (
         <p className="market-unavailable">
-          {t('market.unavailable')}
+          {t('market.unavailable', { key: 'DATA_GOV_IN_API_KEY' })}
         </p>
       )}
 
@@ -59,14 +62,44 @@ export default function MarketCard({ modelStatus }) {
             </select>
           </div>
           <div className="form-group">
-            <label htmlFor="market-region">{t('market.region')}</label>
+            <label htmlFor="market-state">{t('market.state')}</label>
             <input
-              id="market-region"
+              id="market-state"
               type="text"
-              name="region"
+              name="state"
               className="form-control"
-              placeholder={t('market.regionPlaceholder')}
-              defaultValue="India"
+              placeholder={t('market.statePlaceholder')}
+              autoComplete="address-level1"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="market-district">{t('market.district')}</label>
+            <input
+              id="market-district"
+              type="text"
+              name="district"
+              className="form-control"
+              placeholder={t('market.districtPlaceholder')}
+              autoComplete="address-level2"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="market-name">{t('market.marketName')}</label>
+            <input
+              id="market-name"
+              type="text"
+              name="market"
+              className="form-control"
+              placeholder={t('market.marketPlaceholder')}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="market-date">{t('market.date')}</label>
+            <input
+              id="market-date"
+              type="date"
+              name="date"
+              className="form-control"
             />
           </div>
         </div>
@@ -77,27 +110,44 @@ export default function MarketCard({ modelStatus }) {
           ) : t('market.check')}
         </button>
       </form>
+      <p className="result-note">{t('market.latestNote')}</p>
 
       {error && <p className="error-msg" role="alert">{error || t('market.error')}</p>}
 
       {result && (
         <ResultBox title={t('market.result')}>
-          {result.status === 'ok' && result.current_price != null ? (
+          {result.status === 'ok' && result.records?.length ? (
             <>
-              <div className="result-row">
-                <span className="result-label">{t('market.cropMarket')}</span>
-                <span className="result-value">{result.crop} · {result.region || result.market}</span>
-              </div>
-              <div className="result-row">
-                <span className="result-label">{t('market.price')}</span>
-                <span className="result-value">{result.current_price} {result.units}</span>
-              </div>
-              <p className="result-note">{t('market.source')}: {result.source}</p>
-              <p className="result-note">{t('market.updated')}: {result.updated_at}</p>
+              <p className="result-note">{result.freshness}</p>
+              {result.records.map((record, index) => (
+                <article
+                  className="market-record"
+                  key={`${record.state}-${record.district}-${record.market}-${record.arrival_date}-${index}`}
+                >
+                  <h3>{record.commodity} · {record.market}</h3>
+                  <p>{record.district}, {record.state}{record.variety ? ` · ${record.variety}` : ''}</p>
+                  <div className="result-row">
+                    <span className="result-label">{t('market.minPrice')}</span>
+                    <span className="result-value">{record.min_price ?? t('market.notReported')} {record.min_price != null && record.price_unit}</span>
+                  </div>
+                  <div className="result-row">
+                    <span className="result-label">{t('market.maxPrice')}</span>
+                    <span className="result-value">{record.max_price ?? t('market.notReported')} {record.max_price != null && record.price_unit}</span>
+                  </div>
+                  <div className="result-row">
+                    <span className="result-label">{t('market.modalPrice')}</span>
+                    <span className="result-value">{record.modal_price ?? t('market.notReported')} {record.modal_price != null && record.price_unit}</span>
+                  </div>
+                  <p className="result-note">{t('market.arrivalDate')}: {record.arrival_date}</p>
+                  <p className="result-note">
+                    {t('market.source')}: <a href={record.source_url} target="_blank" rel="noreferrer">{record.source}</a>
+                  </p>
+                </article>
+              ))}
             </>
           ) : (
             <>
-              <div className="status-banner">{t('market.liveUnavailable')}</div>
+              <div className="status-banner">{t('market.noPublishedResults')}</div>
               <p className="result-note">{result.message || t('market.noPrice')}</p>
             </>
           )}

@@ -10,7 +10,7 @@ import time
 
 import numpy as np
 import pandas as pd
-from fastapi import FastAPI, File, Form, UploadFile
+from fastapi import FastAPI, File, Form, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -25,7 +25,7 @@ from app.ml.model_loader import (
     get_yield_model,
     model_status,
 )
-from app.services.market_service import get_market_price
+from app.services.market_service import MarketProviderError, get_market_price
 from app.services.yield_year_policy import year_policy, estimate_context
 
 app = FastAPI(title="AgriVision API")
@@ -90,10 +90,19 @@ def yield_options():
 
 
 @app.post("/api/disease/predict")
-async def predict_disease(file: UploadFile = File(...)):
+async def predict_disease(file: UploadFile = File(...), crop: str = Form(...)):
     model = get_disease_model()
     if model is None:
         return JSONResponse(status_code=503, content=_disease_not_trained())
+    if crop not in {"tomato", "potato", "pepper"}:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "status": "error",
+                "code": "unsupported_crop",
+                "message": "Choose tomato, potato, or bell pepper.",
+            },
+        )
 
     image_bytes = await file.read(MAX_IMAGE_BYTES + 1)
     if not image_bytes:
@@ -132,11 +141,51 @@ async def predict_disease(file: UploadFile = File(...)):
             content={"status": "error", "message": "Model output does not match its saved class mapping."},
         )
     predicted_index = int(np.argmax(probabilities))
+    confidence = float(probabilities[predicted_index])
+    try:
+        confidence_threshold = float(os.environ.get("DISEASE_CONFIDENCE_THRESHOLD", "0.70"))
+    except ValueError:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": "Disease confidence threshold configuration is invalid."},
+        )
+    if not math.isfinite(confidence_threshold) or not 0 <= confidence_threshold <= 1:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": "Disease confidence threshold configuration is invalid."},
+        )
+    if confidence < confidence_threshold:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "status": "uncertain",
+                "code": "low_confidence",
+                "message": "The image could not be classified confidently. Upload a clear supported leaf image.",
+            },
+        )
     disease = class_names[predicted_index]
+    predicted_crop = (
+        "tomato"
+        if disease.lower().startswith("tomato")
+        else "potato"
+        if disease.lower().startswith("potato")
+        else "pepper"
+        if disease.lower().startswith(("pepper", "bell"))
+        else None
+    )
+    if predicted_crop != crop:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "status": "error",
+                "code": "selected_crop_mismatch",
+                "message": "The result does not match the selected crop. Choose the crop shown in the image and try again.",
+            },
+        )
     return {
         "status": "ok",
         "disease": disease,
-        "confidence": float(probabilities[predicted_index]),
+        "confidence": confidence,
         "confidence_kind": "softmax score; not test accuracy",
         "model_id": get_disease_metadata().get("model_id"),
         "inference_ms": inference_ms,
@@ -198,8 +247,32 @@ def predict_yield(
 
 
 @app.get("/api/market/price")
-def market_price(crop: str, region: str = "India") -> dict:
-    return get_market_price(crop=crop, region=region)
+def market_price(
+    crop: str = Query(..., min_length=1, max_length=50),
+    state: str | None = Query(None, max_length=100),
+    district: str | None = Query(None, max_length=100),
+    market: str | None = Query(None, max_length=100),
+    date: str | None = Query(None, max_length=10),
+    region: str | None = Query(None, max_length=100),
+):
+    try:
+        return get_market_price(
+            crop=crop,
+            state=state,
+            district=district,
+            market=market,
+            observed_date=date,
+            region=region,
+        )
+    except MarketProviderError as exc:
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={
+                "status": "error",
+                "code": exc.code,
+                "message": exc.message,
+            },
+        )
 
 
 @app.get("/api/ready")

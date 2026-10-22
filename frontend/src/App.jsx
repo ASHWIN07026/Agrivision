@@ -14,10 +14,14 @@ const INITIAL_STATUS = {
   yield_model_available: false,
   disease_supported_categories: [],
   market_data_available: false,
+  market_api_configured: false,
 };
 
 function Dashboard() {
-  const [activePanel, setActivePanel] = useState('disease');
+  const [activePanel, setActivePanel] = useState(() => {
+    const requested = new URLSearchParams(window.location.search).get('panel');
+    return ['disease', 'yield', 'supplies'].includes(requested) ? requested : 'disease';
+  });
   const [modelStatus, setModelStatus] = useState(INITIAL_STATUS);
   const [yieldOptions, setYieldOptions] = useState(null);
   const [apiError, setApiError] = useState('');
@@ -54,7 +58,10 @@ function Dashboard() {
 
   return (
     <>
-      <Navbar activePanel={activePanel} onPanelChange={setActivePanel} />
+      <Navbar
+        activePanel={activePanel}
+        onPanelChange={setActivePanel}
+      />
       <div className="dashboard-container">
         <Header modelStatus={modelStatus} apiError={apiError} />
         <main id="main-content" className="module-panels">

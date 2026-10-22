@@ -5,7 +5,7 @@ import { useI18n } from '../i18n/I18nContext';
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
 export default function YieldCard({ modelStatus, options }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -165,9 +165,9 @@ export default function YieldCard({ modelStatus, options }) {
                 <>
                   <div className="yield-display">
                     <span className="yield-number">
-                      {Number(result.expected_yield_kg_per_hectare).toLocaleString()}
+                      {Number(result.expected_yield_kg_per_hectare).toLocaleString(locale)}
                     </span>
-                    <span className="yield-unit">kg / hectare</span>
+                    <span className="yield-unit">{t('yield.unit')}</span>
                   </div>
                   <div className="result-row">
                     <span className="result-label">{t('yield.locationCrop')}</span>
@@ -187,7 +187,7 @@ export default function YieldCard({ modelStatus, options }) {
                     </div>
                     <div className="result-row">
                       <span className="result-label">{t('disease.inference')}</span>
-                      <span className="result-value">{Number(result.inference_ms).toFixed(1)} ms</span>
+                      <span className="result-value">{Number(result.inference_ms).toLocaleString(locale, { maximumFractionDigits: 1 })} ms</span>
                     </div>
                   </details>
                 </>

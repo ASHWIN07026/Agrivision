@@ -11,3 +11,5 @@ services:
         value: '1'
       - key: OMP_NUM_THREADS
         value: '1'
+      - key: DATA_GOV_IN_API_KEY
+        sync: false

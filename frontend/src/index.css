@@ -26,12 +26,10 @@
 }
 
 html {
-  min-width: 320px;
   scroll-behavior: smooth;
 }
 
 body {
-  min-width: 320px;
   min-height: 100vh;
   margin: 0;
   background:
@@ -118,6 +116,29 @@ a:hover {
   gap: 0.35rem;
 }
 
+.navbar-main,
+.navbar-account {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.navbar-user {
+  max-width: 15rem;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.88rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-history {
+  display: inline-flex;
+  align-items: center;
+  color: var(--green-800);
+  text-decoration: none;
+}
+
 .nav-link {
   min-height: 44px;
   padding: 0.55rem 0.9rem;
@@ -150,6 +171,42 @@ a:hover {
 .header {
   margin: 0 auto 2rem;
   text-align: center;
+}
+
+.header-topline {
+  position: relative;
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.language-control--desktop {
+  position: absolute;
+  right: 0;
+}
+
+.language-control--mobile {
+  display: none;
+}
+
+.language-select {
+  min-height: 42px;
+  max-width: 12rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #aebfae;
+  border-radius: 0.6rem;
+  background: #fff;
+  color: var(--text);
 }
 
 .header-badge {
@@ -640,6 +697,7 @@ a:hover {
   background: #f1f4f0;
   color: #43564a;
   font-weight: 650;
+  overflow-wrap: anywhere;
 }
 
 .care-details > summary {
@@ -737,6 +795,24 @@ a:hover {
   margin-top: 1rem;
 }
 
+.market-record {
+  min-width: 0;
+  margin-top: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.market-record h3 {
+  margin: 0 0 0.35rem;
+  color: var(--green-900);
+  font-size: 1.05rem;
+}
+
+.market-record > p {
+  margin: 0.4rem 0;
+  overflow-wrap: anywhere;
+}
+
 .market-unavailable {
   max-width: 800px;
   font-weight: 500;
@@ -756,14 +832,38 @@ a:hover {
     padding: 0.65rem 1rem;
   }
 
+  .navbar-main {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
   .navbar-brand {
     align-self: center;
   }
 
   .navbar-links {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.25rem;
+  }
+
+  .navbar-account {
+    justify-content: space-between;
+    gap: 0.4rem;
+  }
+
+  .language-control--mobile {
+    display: inline-flex;
+    flex: 0 0 auto;
+  }
+
+  .language-control--desktop {
+    display: none;
+  }
+
+  .language-control--mobile .language-select {
+    max-width: 9rem;
   }
 
   .nav-link {
@@ -820,6 +920,18 @@ a:hover {
 
   .market-heading {
     flex-direction: column;
+  }
+
+  .page-heading {
+    flex-direction: column;
+  }
+
+  .history-item-heading {
+    flex-direction: column;
+  }
+
+  .history-item time {
+    text-align: left;
   }
 
   .result-row {

@@ -55,6 +55,11 @@ The current prototype implements leaf disease classification and historical crop
 
 ## 🚀 3. Key Features
 
+### 🌐 Language options
+
+- English, Tamil, Hindi, and Tanglish translations; Telugu, Kannada, Malayalam, and Bengali are partially translated with English fallback.
+- The dashboard opens directly; account sign-up, login, and prediction history are not currently included in the frontend.
+
 ### 🌿 3.1 Crop Disease Detection
 
 The Crop Disease Detection module uses computer vision and deep learning to identify supported diseases from plant leaf images.
@@ -70,6 +75,7 @@ The Crop Disease Detection module uses computer vision and deep learning to iden
 **Current support:** 15 PlantVillage disease/healthy categories.
 
 The model does not currently support every agricultural crop or disease.
+The API validates image format, dimensions, selected crop, crop-label consistency, and a configurable confidence floor. It does **not** yet have a separate validated image-content model, so unrelated non-leaf photos can still receive a disease label. Do not treat those outputs as a diagnosis; an independently evaluated leaf/object validator and representative negative-image tests are still required.
 
 ### 🌾 3.2 Crop Yield Estimation
 
@@ -98,7 +104,9 @@ The Market Intelligence module is intended to help farmers understand agricultur
 - Price and demand analysis.
 - Market decision support.
 
-**Current status:** The market information interface is available, but live market API integration remains pending.
+**Current status:** A server-side AGMARKNET/data.gov.in lookup is wired for published market observations. It is not real-time and remains unavailable until the provider credential has been registered and configured.
+
+Set `DATA_GOV_IN_API_KEY` in the backend environment (or in Render's environment settings) using an API key issued by data.gov.in. Do not expose it in the frontend or commit it. The lookup supports crop, optional state/district/market and optional observation date, and reports the source arrival date and min/max/modal prices without unit conversion. Empty results, provider authentication failures, and rate limits are reported explicitly. Live provider access still needs verification with an issued key.
 
 ### 💡 3.4 Agricultural Recommendations
 

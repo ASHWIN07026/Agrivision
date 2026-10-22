@@ -11,11 +11,12 @@ export function I18nProvider({ children }) {
   });
 
   useEffect(() => {
-    document.documentElement.lang = language === 'ta' ? 'ta' : 'en';
+    document.documentElement.lang = language === 'tanglish' ? 'en' : language;
   }, [language]);
 
   const value = useMemo(() => ({
     language,
+    locale: language === 'tanglish' ? 'en-IN' : `${language}-IN`,
     languages: LANGUAGES,
     setLanguage: (nextLanguage) => {
       if (!Object.prototype.hasOwnProperty.call(LANGUAGES, nextLanguage)) {

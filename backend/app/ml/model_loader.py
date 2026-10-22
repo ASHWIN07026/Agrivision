@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -99,6 +100,7 @@ def get_yield_metadata() -> dict:
 
 
 def model_status() -> dict:
+    market_configured = bool(os.environ.get("DATA_GOV_IN_API_KEY", "").strip())
     return {
         "disease_model_available": _disease_model is not None,
         "yield_model_available": _yield_model is not None,
@@ -106,6 +108,11 @@ def model_status() -> dict:
         "yield_model_id": _yield_metadata.get("model_id"),
         "disease_supported_categories": _disease_classes,
         "market_data_available": False,
-        "market_message": "Live market data unavailable: no verified authorized market API integration is configured.",
+        "market_api_configured": market_configured,
+        "market_message": (
+            "Published AGMARKNET market prices are configured; records are not real-time."
+            if market_configured
+            else "Published market prices require a server-side data.gov.in API key."
+        ),
         "model_load_errors": _load_errors,
     }

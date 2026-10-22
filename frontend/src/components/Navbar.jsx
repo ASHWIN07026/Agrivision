@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import LanguageSelect from './LanguageSelect';
 import { useI18n } from '../i18n/I18nContext';
 
 const PANELS = [
@@ -10,6 +11,9 @@ const PANELS = [
 export default function Navbar({ activePanel, onPanelChange }) {
   const { t } = useI18n();
   const tabRefs = useRef([]);
+  const selectPanel = (panel) => {
+    onPanelChange(panel.id);
+  };
 
   const handleKeyDown = (event, index) => {
     let nextIndex;
@@ -20,34 +24,43 @@ export default function Navbar({ activePanel, onPanelChange }) {
     else return;
 
     event.preventDefault();
-    onPanelChange(PANELS[nextIndex].id);
+    selectPanel(PANELS[nextIndex]);
     tabRefs.current[nextIndex]?.focus();
   };
 
   return (
     <nav className="navbar">
-      <a className="navbar-brand" href="#main-content" aria-label={t('nav.home')}>
+      <a
+        className="navbar-brand"
+        href="/"
+        aria-label={t('nav.home')}
+      >
         <span className="navbar-logo">🌿</span>
         <span className="navbar-title">AgriVision</span>
       </a>
-      <div className="navbar-links" role="tablist" aria-label={t('nav.label')} aria-orientation="horizontal">
-        {PANELS.map((panel, index) => (
-          <button
-            key={panel.id}
-            ref={(element) => { tabRefs.current[index] = element; }}
-            id={`tab-${panel.id}`}
-            className="nav-link"
-            type="button"
-            role="tab"
-            aria-selected={activePanel === panel.id}
-            aria-controls={`panel-${panel.id}`}
-            tabIndex={activePanel === panel.id ? 0 : -1}
-            onClick={() => onPanelChange(panel.id)}
-            onKeyDown={(event) => handleKeyDown(event, index)}
-          >
-            {t(panel.labelKey)}
-          </button>
-        ))}
+      <div className="navbar-main">
+        <div className="navbar-links" role="tablist" aria-label={t('nav.label')} aria-orientation="horizontal">
+          {PANELS.map((panel, index) => (
+            <button
+              key={panel.id}
+              ref={(element) => { tabRefs.current[index] = element; }}
+              id={`tab-${panel.id}`}
+              className="nav-link"
+              type="button"
+              role="tab"
+              aria-selected={activePanel === panel.id}
+              aria-controls={`panel-${panel.id}`}
+              tabIndex={activePanel === panel.id ? 0 : -1}
+              onClick={() => selectPanel(panel)}
+              onKeyDown={(event) => handleKeyDown(event, index)}
+            >
+              {t(panel.labelKey)}
+            </button>
+          ))}
+        </div>
+        <div className="navbar-account">
+          <LanguageSelect className="language-control--mobile" />
+        </div>
       </div>
     </nav>
   );
