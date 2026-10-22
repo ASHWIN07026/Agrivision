@@ -3,7 +3,6 @@ import Navbar from './components/Navbar';
 import Header from './components/Header';
 import DiseaseCard from './components/DiseaseCard';
 import YieldCard from './components/YieldCard';
-import MarketCard from './components/MarketCard';
 import MarketplaceCard from './components/MarketplaceCard';
 import SuppliesCard from './components/SuppliesCard';
 import { I18nProvider } from './i18n/I18nContext';
@@ -14,8 +13,7 @@ const INITIAL_STATUS = {
   disease_model_available: false,
   yield_model_available: false,
   disease_supported_categories: [],
-  market_data_available: false,
-  market_api_configured: false,
+  shop_provider_configured: false,
 };
 
 function Dashboard() {
@@ -96,7 +94,6 @@ function Dashboard() {
           >
             <SuppliesCard />
             <MarketplaceCard />
-            <MarketCard modelStatus={modelStatus} />
           </section>
         </main>
       </div>

@@ -37,3 +37,7 @@ Sources:
 - https://apidocs.geoapify.com/docs/places/
 - https://apidocs.geoapify.com/docs/geocoding/forward-geocoding/
 - https://www.geoapify.com/pricing/
+
+## Interface update
+
+The unavailable data.gov.in price card has been removed from Products & Shops. The header now reports Geoapify shop-provider configuration and the Render blueprint requests `GEOAPIFY_API_KEY` instead of requiring a data.gov.in key. Geoapify supplies mapped places, not crop prices or discounts. The optional legacy backend price endpoint remains for compatibility, but the dashboard no longer requests it. Existing Render secrets are not modified by editing the blueprint; preserve the already configured Geoapify key.

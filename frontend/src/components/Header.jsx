@@ -5,7 +5,7 @@ export default function Header({ modelStatus, apiError }) {
   const { t } = useI18n();
   const diseaseReady = modelStatus?.disease_model_available;
   const yieldReady = modelStatus?.yield_model_available;
-  const marketConfigured = modelStatus?.market_api_configured === true;
+  const shopsConfigured = modelStatus?.shop_provider_configured === true;
 
   return (
     <header className="header">
@@ -23,8 +23,8 @@ export default function Header({ modelStatus, apiError }) {
         <span className={`status-pill ${yieldReady ? 'status-ready' : 'status-pending'}`} role="status">
           {t('status.yield')}: {yieldReady ? t('status.ready') : modelStatus?.api_available ? t('status.unavailable') : t('status.apiUnavailable')}
         </span>
-        <span className={`status-pill ${marketConfigured ? 'status-ready' : 'status-pending'}`} role="status">
-          {t('status.liveMarket')}: {marketConfigured ? t('market.providerConfigured') : t('status.marketUnavailable')}
+        <span className={`status-pill ${shopsConfigured ? 'status-ready' : 'status-pending'}`} role="status">
+          {t('status.nearbyShops')}: {shopsConfigured ? t('status.shopConfigured') : t('status.marketUnavailable')}
         </span>
       </div>
       {apiError && <p className="error-msg" role="alert">{apiError}</p>}
