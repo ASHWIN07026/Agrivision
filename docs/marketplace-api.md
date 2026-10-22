@@ -62,3 +62,9 @@ The administrator key grants publishing access, so retain it server-side and use
 Nine marketplace test methods cover unauthenticated access, missing key/storage configuration, real database persistence, filters, pagination, offer calculations and expiry, invalid prices/categories/contact consent, listing expiry/withdrawal, shop radius/category/coordinate validation and HTTPS website validation. They use isolated temporary databases and fictional test fixtures, never production data.
 
 Together with existing tests, 26 test methods passed. The production frontend build passed. No live deployment is claimed; the previously confirmed GitHub write-access blocker must be resolved before the commit can be pushed and Render deployment verified.
+
+## Public interface update — real store links
+
+The public dashboard no longer shows the empty submission-listing search form. It now provides clearly labelled external AgriBegri category links (seeds, fertilizers, crop protection, irrigation) and the retailer's offers page, plus the existing Geoapify mapped-shop search. The linked category/offer URLs were checked against the retailer's navigation. Link checking does not validate every product, stock item, offer or checkout.
+
+No retailer price, discount or inventory feed is imported, and no discount amounts or product entries are fabricated. Buyers see the retailer's actual current terms when opening its website. The backend marketplace endpoints remain available for future real submissions; self-service crop selling and checkout remain unavailable in the public dashboard. This update needs no additional API key or database configuration.
