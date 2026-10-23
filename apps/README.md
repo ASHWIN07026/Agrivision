@@ -36,7 +36,7 @@ The build uses a temporary self-signed demo certificate; no signing key, passwor
 `03_Demo/Android/`: signed APK.
 `03_Demo/Screenshots/`: captured app/web interface images.
 `03_Demo/Video/`: labelled screenshot walkthrough MP4 (not a recording of the Windows runtime).
-`04_Source_Code/`: source archive, without dependencies, private credentials or signing material.
+`04_Source_Code/`: link and commit reference to the existing GitHub source, without duplicate source files or private credentials.
 
 ## Verification limits
 
