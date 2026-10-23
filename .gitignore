@@ -228,3 +228,11 @@ models/validation/*.download
 backend/data/
 *.sqlite3
 *.sqlite3-*
+
+# Native app build outputs and private signing material
+apps/**/release/
+apps/**/node_modules/
+*.apk
+*.idsig
+*.keystore
+*.p12

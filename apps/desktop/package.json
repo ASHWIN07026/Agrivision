@@ -1,0 +1,35 @@
+{
+  "name": "agrivision-desktop",
+  "version": "1.0.0",
+  "description": "AgriVision online precision agriculture desktop app",
+  "author": "ASHWIN S",
+  "license": "MIT",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "build:windows": "electron-builder --win portable --x64"
+  },
+  "build": {
+    "appId": "com.agrivision.desktop",
+    "productName": "AgriVision",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.cjs",
+      "offline.html",
+      "package.json"
+    ],
+    "win": {
+      "target": "portable",
+      "signAndEditExecutable": false
+    },
+    "portable": {
+      "artifactName": "AgriVision-Windows-x64.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0"
+  }
+}
