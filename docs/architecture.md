@@ -1,3 +1,5 @@
+> Current account access: the public web, Windows and Android interfaces are account-free. User login/logout/signup and private history screens have been removed; the database/auth sections below describe the original proposal. Existing stored data and owner-only policies are preserved. See [current status](authentication.md).
+
 # AGROVISION AI - Architecture Document
 
 ## System Overview

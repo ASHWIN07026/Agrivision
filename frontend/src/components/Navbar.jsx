@@ -7,8 +7,6 @@ const PANELS = [
   { id: 'disease', labelKey: 'nav.disease' },
   { id: 'yield', labelKey: 'nav.yield' },
   { id: 'supplies', labelKey: 'nav.supplies' },
-  { id: 'history', label: 'History' },
-  { id: 'account', label: 'Account / Log in' },
 ];
 
 export default function Navbar({ activePanel, onPanelChange }) {
@@ -61,7 +59,7 @@ export default function Navbar({ activePanel, onPanelChange }) {
             </button>
           ))}
         </div>
-        <div className="navbar-account">
+        <div className="navbar-tools">
           <LanguageSelect className="language-control--mobile" />
         </div>
       </div>

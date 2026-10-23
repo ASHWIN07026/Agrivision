@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
         if (code == 202 && locationCallback != null) { locationCallback.invoke(locationOrigin, hasLocation(), false); locationCallback = null; }
     }
     private void showOffline() {
-        web.loadDataWithBaseURL(null, "<html><meta name='viewport' content='width=device-width, initial-scale=1'><body style='font:18px sans-serif;padding:25px;background:#eef5e9;color:#204c36'><h1>AgriVision</h1><h2>Internet connection needed</h2><p>This app connects to the live AgriVision server. Predictions, login and shops need internet. Render may need time to wake up.</p><p>Connect to the internet, then tap Retry above.</p></body></html>", "text/html", "UTF-8", null);
+        web.loadDataWithBaseURL(null, "<html><meta name='viewport' content='width=device-width, initial-scale=1'><body style='font:18px sans-serif;padding:25px;background:#eef5e9;color:#204c36'><h1>AgriVision</h1><h2>Internet connection needed</h2><p>This app connects to the live AgriVision server. Predictions and shops need internet. Render may need time to wake up.</p><p>Connect to the internet, then tap Retry above.</p></body></html>", "text/html", "UTF-8", null);
     }
     @Override protected void onActivityResult(int code, int result, Intent data) {
         super.onActivityResult(code, result, data);

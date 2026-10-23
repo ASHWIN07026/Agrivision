@@ -31,8 +31,6 @@ from app.api.marketplace import router as marketplace_router
 from app.services.shop_provider import router as shop_router
 from app.services.yield_year_policy import year_policy, estimate_context
 
-from app.services.public_config import public_config
-
 app = FastAPI(title="AgriVision API")
 app.include_router(marketplace_router)
 app.include_router(shop_router)
@@ -43,11 +41,6 @@ app.add_middleware(
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Content-Type", "Authorization"],
 )
-
-@app.get("/api/public-config")
-def browser_config():
-    return JSONResponse(public_config(), headers={"Cache-Control": "no-store"})
-
 
 MAX_IMAGE_BYTES = 10 * 1024 * 1024
 

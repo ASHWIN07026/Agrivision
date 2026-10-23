@@ -1,6 +1,6 @@
 # AgriVision Windows and Android apps
 
-These are online app clients for `https://agrivision-6o2f.onrender.com`. They retain the deployed platform's design, models, camera/upload, care guidance, product links, dashboard and account/history features. They do not bundle or retrain models, implement an offline backend, or repair missing production credentials. The active Render deployment supplies the UI and APIs.
+These are online app clients for `https://agrivision-6o2f.onrender.com`. They retain the deployed platform's design, models, camera/upload, care guidance, product links, dashboard and direct access without user accounts. They do not bundle or retrain models, implement an offline backend, or repair missing production credentials. The active Render deployment supplies the UI and APIs.
 
 ## Windows
 
@@ -40,4 +40,8 @@ The build uses a temporary self-signed demo certificate; no signing key, passwor
 
 ## Verification limits
 
-Windows artifact: cross-built on Linux, PE/container inspection and packaged app security configuration reviewed. Android: Java compile, DEX/resources package, signature verification and zip alignment passed. Live dashboard and model readiness inspected through the browser. Screenshots demonstrate observed web-platform behavior. Physical Windows execution, Android installation, camera, location prompts and actual account/history flow must still be checked on the target devices. If Supabase is unconfigured, accounts/history remain unavailable in both clients exactly as on the website. Do not describe this as an offline AI application or as fully device-tested.
+Windows artifact: cross-built on Linux, PE/container inspection and packaged app security configuration reviewed. Android: Java compile, DEX/resources package, signature verification and zip alignment passed. Live dashboard and model readiness inspected through the browser. Screenshots demonstrate observed web-platform behavior. Physical Windows execution, Android installation, camera, location prompts must still be checked on the target devices. This source update removes login, logout, signup and account-only history from the web interface. Both clients receive this removal after the updated website is deployed and the client is reloaded. Do not describe this as an offline AI application or as fully device-tested.
+
+## Account-free update
+
+The clients load the current website, so a web deployment removes account screens from Windows and Android together. Existing installers remain usable; reopen the app or choose Home/Retry after deployment. See docs/authentication.md.

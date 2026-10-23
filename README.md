@@ -58,7 +58,7 @@ The current prototype implements leaf disease classification and historical crop
 ### 🌐 Language options
 
 - English, Tamil, Hindi, and Tanglish translations; Telugu, Kannada, Malayalam, and Bengali are partially translated with English fallback.
-- The dashboard opens directly; account sign-up, login, and prediction history are not currently included in the frontend.
+- The dashboard opens directly on web, Windows and Android. Login, logout, sign-up and account-only history have been removed. After deploying main on Render, reopen or reload the existing apps to receive this interface; reinstalling the EXE/APK is not required. See [account-free access](docs/authentication.md).
 
 ### 🌿 3.1 Crop Disease Detection
 

@@ -29,7 +29,7 @@ export function formatCategory(category, t) {
   return `${t(cropKey)} — ${t(conditionKeys[condition]) || condition.replaceAll('_', ' ')}`;
 }
 
-export default function DiseaseCard({ modelStatus, onResultChange, onPredictionComplete }) {
+export default function DiseaseCard({ modelStatus, onResultChange }) {
   const { t, locale } = useI18n();
   const [imagePreview, setImagePreview] = useState(null);
   const [fileName, setFileName] = useState('');
@@ -117,7 +117,6 @@ export default function DiseaseCard({ modelStatus, onResultChange, onPredictionC
         throw new Error(data?.message || `Prediction failed (${response.status}).`);
       } else {
         setResult(data);
-        onPredictionComplete?.('disease', data, `Leaf photo · selected crop: ${selectedCrop}`);
       }
     } catch (requestError) {
       setError(requestError.message || 'The model could not produce a prediction.');

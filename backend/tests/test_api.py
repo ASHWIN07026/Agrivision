@@ -25,14 +25,10 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(self.client.get('/api/ready').status_code, 200)
         self.assertTrue(self.client.get('/api/health').json()['leaf_validator_available'])
 
-    def test_browser_config_never_exposes_server_secret(self):
-        with patch.dict(os.environ, {'SUPABASE_URL': 'https://example.supabase.co', 'SUPABASE_PUBLISHABLE_KEY': 'sb_secret_private', 'SUPABASE_SERVICE_ROLE_KEY': 'server-only'}, clear=True):
-            response = self.client.get('/api/public-config')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.headers['cache-control'], 'no-store')
-        self.assertFalse(response.json()['auth_configured'])
-        self.assertNotIn('server-only', response.text)
-        self.assertNotIn('sb_secret_private', response.text)
+    def test_account_config_endpoint_removed(self):
+        response = self.client.get('/api/public-config')
+        self.assertEqual(response.status_code, 404)
+        self.assertNotIn('supabase_publishable_key', response.text)
 
     def test_supported_leaves_preserve_predictions(self):
         for crop, sample, label in [

@@ -117,7 +117,7 @@ a:hover {
 }
 
 .navbar-main,
-.navbar-account {
+.navbar-tools {
   display: flex;
   align-items: center;
   gap: 0.65rem;
@@ -848,7 +848,7 @@ a:hover {
     gap: 0.25rem;
   }
 
-  .navbar-account {
+  .navbar-tools {
     justify-content: space-between;
     gap: 0.4rem;
   }
